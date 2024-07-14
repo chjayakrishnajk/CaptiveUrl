@@ -25,9 +25,9 @@ namespace CaptiveUrl
 			Console.WriteLine("HttpClient: "+await GetCaptivePortalUrl3());
 			Console.WriteLine("Http Client with redirection: " + await DetectCaptivePortal());
 			Console.WriteLine(GetCaptivePortalUrlCurl() ?? "No captive portal detected via method 1 curl");
-			Console.WriteLine(GetCaptivePortalUrlWithCurl2()?? "No captive portal detected via method 2 curl");
+			Console.WriteLine(await GetCaptivePortalUrlWithCurl2()?? "No captive portal detected via method 2 curl");
 		}
-        public static async Task<string> GetCaptivePortalUrlWithCurl2(string url, string text)
+        public static async Task<string> GetCaptivePortalUrlWithCurl2()
     {
         var startInfo = new ProcessStartInfo
         {
