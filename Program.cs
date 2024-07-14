@@ -17,7 +17,7 @@ namespace CaptiveUrl
 		public static string text = "Success";
 		public static async Task Main(string[] args)
 		{
-			if(args[0] != null)
+			if(args.Length != 0)
 			{
 				url = args[0];
 				text = args[1];
