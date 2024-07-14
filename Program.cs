@@ -27,6 +27,37 @@ namespace CaptiveUrl
 			string captivePortalUrl = GetCaptivePortalUrlCurl();
 			Console.WriteLine(captivePortalUrl ?? "No captive portal detected");
 		}
+        public static async Task<string> GetCaptivePortalUrlWithCurlAsync(string url, string text)
+    {
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = "curl",
+            Arguments = $"-v -k {url}",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        using (var process = new Process { StartInfo = startInfo })
+        {
+            process.Start();
+            string output = await process.StandardError.ReadToEndAsync(); // curl writes verbose output to stderr
+            await process.WaitForExitAsync();
+
+            // Use regex to find the Location header
+            var match = Regex.Match(output, @"^< Location: (.*)$", RegexOptions.Multiline);
+            if (match.Success)
+            {
+                return match.Groups[1].Value.Trim();
+            }
+
+            Console.WriteLine("Full curl output:");
+            Console.WriteLine(output);
+
+            return null; // Return null if no Location header was found
+        }
+    }
 	public async static Task<string> GetCaptivePortalUrl3()
 	{
 		using (var client = new HttpClient())
